@@ -1,37 +1,73 @@
-var canvas = document.getElementById("canvas");
-var context = canvas.getContext("2d");
-var headX = 10;
-var headY = 10;
-var actualPressedKey = "";
-var speed = 5;
-var tileCount = 20;
-var tileSize = canvas.width / tileCount - 2;
-var gameLoop = function () {
+"use strict";
+const canvas = document.getElementById("canvas");
+const context = canvas.getContext("2d");
+let headX = 10;
+let headY = 10;
+let xVelocity = 0;
+let yVelocity = 0;
+let xDot = 5;
+let yDot = 5;
+let actualPressedKey = "";
+let speed = 5;
+let tileCount = 20;
+let tileSize = canvas.width / tileCount - 2;
+const gameLoop = () => {
     clearScreen();
+    changeSnakeDirection();
+    drawDot();
     drawSnake();
-    setInterval(gameLoop, 1000 / speed);
+    setTimeout(gameLoop, 1000 / speed);
 };
-var clearScreen = function () {
+const clearScreen = () => {
     context.fillStyle = "black";
     context === null || context === void 0 ? void 0 : context.fillRect(0, 0, canvas.width, canvas.height);
 };
-var drawSnake = function () {
+const drawSnake = () => {
     context.fillStyle = "white";
     context === null || context === void 0 ? void 0 : context.fillRect(headX * tileCount, headY * tileCount, tileSize, tileSize);
 };
-// window.document.addEventListener("keydown", (e) => {
-//     console.log(e)
-//     if(e.key === "ArrowRight"){
-//         actualPressedKey = "right"
-//     }
-//     else if(e.key === "ArrowLeft"){
-//         actualPressedKey = "left"
-//     }
-//     else if(e.key === "ArrowDown"){
-//         actualPressedKey = "down"
-//     }
-//     else if(e.key === "ArrowUp"){
-//         actualPressedKey = "up"
-//     }
-// })
+const changeSnakeDirection = () => {
+    headX = headX + xVelocity;
+    headY = headY + yVelocity;
+};
+const drawDot = () => {
+    if (headX === xDot && headY === yDot) {
+        xDot = Math.floor(Math.random() * tileCount);
+        yDot = Math.floor(Math.random() * tileCount);
+    }
+    ;
+    context.fillStyle = "red";
+    context === null || context === void 0 ? void 0 : context.fillRect(xDot * tileCount, yDot * tileCount, tileSize, tileSize);
+};
+window.document.addEventListener("keydown", (e) => {
+    console.log(e);
+    if (e.key === "ArrowRight") {
+        if (xVelocity === -1) {
+            return;
+        }
+        yVelocity = 0;
+        xVelocity = 1;
+    }
+    else if (e.key === "ArrowLeft") {
+        if (xVelocity === 1) {
+            return;
+        }
+        yVelocity = 0;
+        xVelocity = -1;
+    }
+    else if (e.key === "ArrowDown") {
+        if (yVelocity === -1) {
+            return;
+        }
+        yVelocity = 1;
+        xVelocity = 0;
+    }
+    else if (e.key === "ArrowUp") {
+        if (yVelocity === 1) {
+            return;
+        }
+        yVelocity = -1;
+        xVelocity = 0;
+    }
+});
 gameLoop();
