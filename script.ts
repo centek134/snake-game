@@ -5,16 +5,27 @@ let headY: number = 10;
 
 let xVelocity: number = 0;
 let yVelocity: number = 0;
+let snakeTail: number = 5;
+const snakeParts:any = [];
 
-let xDot = 5; 
-let yDot = 5;
+let xDot: number = 5; 
+let yDot: number = 5;
 
 let actualPressedKey: string = "";
-let speed: number = 5;
+let speed: number = 7;
 let tileCount: number = 20;
 let tileSize: number = canvas.width / tileCount - 2
 
 
+
+class SnakePart{
+    x: number;
+    y: number;
+    constructor(x:number,y:number){
+        this.x = x;
+        this.y = y;
+    }
+}
 
 const gameLoop = (): void => {
     clearScreen();
@@ -29,8 +40,20 @@ const clearScreen = (): void => {
 }
 
 const drawSnake = (): void => {
-    context!.fillStyle = "white"
-    context?.fillRect(headX*tileCount,headY*tileCount,tileSize,tileSize)
+
+    context!.fillStyle = "green";
+    for(let i = 0; i<snakeParts.length; i++ ){
+        let part = snakeParts[i]
+        context?.fillRect(part.x * tileCount, part.y *tileCount,tileSize,tileSize);
+    }
+
+    snakeParts.push(new SnakePart(headX,headY));
+    while(snakeParts.length > snakeTail){
+        snakeParts.shift();
+    }
+
+    context!.fillStyle = "white";
+    context?.fillRect(headX*tileCount,headY*tileCount,tileSize,tileSize);
 }
 
 const changeSnakeDirection = () => {
@@ -42,6 +65,7 @@ const drawDot = (): void => {
     if(headX === xDot && headY === yDot){
         xDot = Math.floor(Math.random()*tileCount);
         yDot = Math.floor(Math.random()*tileCount); 
+        snakeTail++;
     };
     context!.fillStyle = "red";
     context?.fillRect(xDot*tileCount,yDot*tileCount,tileSize,tileSize);
