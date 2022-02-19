@@ -9,6 +9,7 @@ let snakeTail = 5;
 const snakeParts = [];
 let xDot = 5;
 let yDot = 5;
+let score = 0;
 let actualPressedKey = "";
 let speed = 7;
 let tileCount = 20;
@@ -20,8 +21,12 @@ class SnakePart {
     }
 }
 const gameLoop = () => {
-    clearScreen();
     changeSnakeDirection();
+    let result = gameOver();
+    if (result) {
+        return;
+    }
+    clearScreen();
     drawDot();
     drawSnake();
     setTimeout(gameLoop, 1000 / speed);
@@ -29,6 +34,21 @@ const gameLoop = () => {
 const clearScreen = () => {
     context.fillStyle = "black";
     context === null || context === void 0 ? void 0 : context.fillRect(0, 0, canvas.width, canvas.height);
+};
+const gameOver = () => {
+    let gameOver = false;
+    if (headX < 0 || headX > canvas.width) {
+        gameOver = true;
+    }
+    else if (headY < 0 || headY > canvas.height) {
+        gameOver = true;
+    }
+    if (gameOver) {
+        context.fillStyle = "white";
+        context.font = "50px Verdana";
+        context.fillText("Game Over!", canvas.width / 2, canvas.height / 2);
+    }
+    return gameOver;
 };
 const drawSnake = () => {
     context.fillStyle = "green";
@@ -52,10 +72,16 @@ const drawDot = () => {
         xDot = Math.floor(Math.random() * tileCount);
         yDot = Math.floor(Math.random() * tileCount);
         snakeTail++;
+        score++;
     }
     ;
     context.fillStyle = "red";
     context === null || context === void 0 ? void 0 : context.fillRect(xDot * tileCount, yDot * tileCount, tileSize, tileSize);
+};
+const drawScore = () => {
+    context.fillStyle = "white";
+    context.font = "10px Verdana";
+    context.fillText("Score" + score, canvas.width - 50, 10);
 };
 window.document.addEventListener("keydown", (e) => {
     console.log(e);

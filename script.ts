@@ -10,6 +10,7 @@ const snakeParts:any = [];
 
 let xDot: number = 5; 
 let yDot: number = 5;
+let score: number = 0;
 
 let actualPressedKey: string = "";
 let speed: number = 7;
@@ -28,8 +29,12 @@ class SnakePart{
 }
 
 const gameLoop = (): void => {
-    clearScreen();
     changeSnakeDirection();
+    let result = gameOver();
+    if(result){
+        return;
+    }
+    clearScreen();
     drawDot();
     drawSnake();
     setTimeout(gameLoop,1000/speed);
@@ -37,6 +42,24 @@ const gameLoop = (): void => {
 const clearScreen = (): void => {
     context!.fillStyle = "black";
     context?.fillRect(0,0,canvas.width,canvas.height)
+}
+
+const gameOver = (): boolean => {
+    let gameOver  = false;
+    if(headX < 0 || headX > canvas.width){
+        gameOver = true;
+    }
+    else if(headY < 0 || headY > canvas.height){
+        gameOver = true;
+    }
+
+    if(gameOver){
+        context!.fillStyle="white";
+        context!.font = "50px Verdana";
+        context!.fillText("Game Over!", canvas.width/2,canvas.height/2);
+    }
+
+    return gameOver;
 }
 
 const drawSnake = (): void => {
@@ -66,9 +89,15 @@ const drawDot = (): void => {
         xDot = Math.floor(Math.random()*tileCount);
         yDot = Math.floor(Math.random()*tileCount); 
         snakeTail++;
+        score++;
     };
     context!.fillStyle = "red";
     context?.fillRect(xDot*tileCount,yDot*tileCount,tileSize,tileSize);
+}
+const drawScore = (): void => {
+    context!.fillStyle = "white";
+    context!.font = "10px Verdana";
+    context!.fillText("Score" + score, canvas.width-50,10)
 }
 
 window.document.addEventListener("keydown", (e) => {
