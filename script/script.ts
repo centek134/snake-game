@@ -1,8 +1,9 @@
 const canvas = document.getElementById("canvas") as HTMLCanvasElement;
 const context = canvas.getContext("2d");
+const gulpSound = document.getElementById("gulp") as HTMLAudioElement;
+
 let headX: number = 10;
 let headY: number = 10;
-
 let xVelocity: number = 0;
 let yVelocity: number = 0;
 let snakeTail: number = 2;
@@ -16,8 +17,6 @@ let actualPressedKey: string = "";
 let speed: number = 7;
 let tileCount: number = 20;
 let tileSize: number = canvas.width / tileCount - 2;
-
-
 
 class SnakePart{
     x: number;
@@ -84,9 +83,10 @@ const changeSnakeDirection = () => {
 const drawDot = (): void => {
     if(headX === xDot && headY === yDot){
         xDot = Math.floor(Math.random()*tileCount);
-        yDot = Math.floor(Math.random()*tileCount); 
+        yDot = Math.floor(Math.random()*tileCount);
         snakeTail++;
         score++;
+        gulpSound!.play()
     };
     context!.fillStyle = "red";
     context!.fillRect(xDot*tileCount,yDot*tileCount,tileSize,tileSize);

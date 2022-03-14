@@ -1,6 +1,7 @@
 "use strict";
 const canvas = document.getElementById("canvas");
 const context = canvas.getContext("2d");
+const gulpSound = document.getElementById("gulp");
 let headX = 10;
 let headY = 10;
 let xVelocity = 0;
@@ -82,6 +83,7 @@ const drawDot = () => {
         yDot = Math.floor(Math.random() * tileCount);
         snakeTail++;
         score++;
+        gulpSound.play();
     }
     ;
     context.fillStyle = "red";
